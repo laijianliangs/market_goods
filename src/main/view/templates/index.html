@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商城</title>
+    <style>
+        #goods_title:hover{
+            color: red;
+            cursor: pointer;
+
+        }
+        #goods_merchant:hover {
+            cursor: pointer;
+        }
+
+        [id^=type-]:hover{
+            cursor: pointer;
+            color: red;
+
+        }
+    </style>
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/view/static/layui/css/layui.css}">
+    <script th:src="@{/view/static/layui/layui.js}" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+<div style=" display: flex;align-items: center">
+    <div style="width: 30%;"><img th:src="@{/view/static/images/logo.png}"></div>
+    <div style="width: 40%; display: flex";>
+        <div style="width: 80%"><input type="text" style="width: 100%;border:solid red 2px;height: 32px"></div>
+        <div style="width: 10%;border: solid red;color: white;background-color: red;height: 32px;text-align: center">搜索</div>
+    </div>
+    <div style="margin-left:160px;cursor:pointer;width: 10%;color:  red;text-align: center;padding: 10px 20px;border: solid lightgray 1px;background: whitesmoke" ><a th:href="@{/pages/front/shopCar/}" >我的购物车</a></div>
+    <div style="margin-left:10px;cursor:pointer;width: 5%;text-align: center;padding: 10px 20px;border: solid lightgray 1px;background: whitesmoke" ><a th:href="@{/pages/front/loginPage}">登录</a></div>
+</div>
+<div style="display: flex">
+    <div style="width: 20%;border: solid red 2px" id="type">
+        <div style="display: flex;align-items: center ;margin-top: 10px" th:each="x:${types_list}">
+            <div th:text="${x.name}"></div>
+            <div style="display: flex;flex-wrap: wrap" th:each="y:${x.list}">
+                <div th:id="'type-'+${y.goodsTypeId}" style="margin: 5px" th:text="${y.typeName}" th:value="'type-'+${y.goodsTypeId}"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="goods" style="width: 80%;border: solid red 3px;display: flex;flex-wrap: wrap; padding: 20px 10px">
+        <div style=" margin-left:45px; margin-top:20px;padding: 10px 8px; border: solid lightgray 1px;box-shadow: 0 0 5px lightgray;width: 25%" th:each="y:${goods_list}">
+            <!--<div style="padding: 0 20px;margin-left: 12px" ><img style="height: 200px;width: 200px" th:src="@{{filename}(filename=${y.img})}"></div>-->
+            <!--<div style="color: orangered">￥<span style="font-size: 23px" th:text="${y.price}"></span><span style="margin-left: 45px;color: black">￥</span><span style="text-decoration:line-through;margin-left: 2px;color: black" th:text="${y.oldPrice}"></span></div>-->
+            <div id="goods_title" style="padding: 8px 0px "></div>
+            <!--<div style="padding: 8px 0px"><span style="color: red" th:text="${y.commentCount}"></span>+评价</div>-->
+            <!--<div id="goods_merchant" style="color: gray;padding: 20px 0px;font-size: 10px" th:text="${y.merchantName}"></div>-->
+        </div>
+    </div>
+</div>
+<script>
+    //发送一个ajax请求
+
+    $(function () {
+        layui.use(['jquery', 'form', 'layer'], function () {
+            var form = layui.form;
+
+            var layer = layui.layer;
+
+             $("[id^=type-]").click(function () {
+
+                 let pid = this.id.split("-")[1];
+               $.post('/pages/index/goods/'+ pid,{},function (res) {
+                   console.info(res);
+                   var obj = eval('(' + res+ ')');
+                   let goodDiv = $("#goods");
+                   goodDiv.empty();
+                   for(var i=0;i<obj.length;i++)
+                   {
+                       let g = obj[i];
+                       let goodsItem =$("<div style=\" margin-left:45px; margin-top:20px;padding: 10px 8px; border: solid lightgray 1px;box-shadow: 0 0 5px lightgray;width: 25%\">\n" +
+                           "            <div style=\"padding: 0 20px;margin-left: 12px\" ><img style=\"height: 200px;width: 200px\" src='"+g.img+"'></div>\n" +
+                           "            <div style=\"color: orangered\">￥<span style=\"font-size: 23px\">"+g.price+"</span><span style=\"margin-left: 45px;color: black\">￥</span><span style=\"text-decoration:line-through;margin-left: 2px;color: black\">"+g.oldPrice+"</span></div>\n" +
+                           "            <div id=\"goods_title\"  style=\"padding: 8px 0px \"><a href='/pages/index/goodsDetail/"+g.goodsId+"'>"+g.title+"</a></div>\n" +
+                           "            <div style=\"padding: 8px 0px\"><span style=\"color: red\">"+g.commentCount+"</span>+评价</div>\n" +
+                           "            <div id=\"goods_merchant\" style=\"color: gray;padding: 20px 0px;font-size: 10px\">"+g.merchantName+"</div>\n" +
+                           "        </div>");
+
+                       goodDiv.append(goodsItem);
+                   }
+               });
+                 // $("#goods_title").click(function(){
+                 //     $("#goods_title").attr("href","/user/index/"+pid);
+                 // });
+
+
+             });
+
+
+
+        });
+    })
+        // layui.use(['jquery','form','layer'],function() {
+        //     var form = layui.form;
+        //     var $ = layui.jquery;
+        //     var layer = layui.layer;
+        //     //监听提交
+        //
+        //     form.on('div(goodsTypeId)', function () {
+        //         var data = $("#goodsTypeId").val();
+        //         $.ajax({
+        //             url: '/pages/index/goods',
+        //             type: 'post',
+        //             dataType: 'json',
+        //             contentType: 'application/json',
+        //             data: JSON.stringify(data),
+        //             success: function (res) {
+        //                 layer.msg("提交成功！");
+        //             },
+        //             error: function (res) {
+        //
+        //             }
+        //         });
+        //     })
+        // })
+
+
+</script>
+</body>
+</html>

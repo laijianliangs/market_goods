@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/view/static/layui/css/layui.css}">
+    <script th:src="@{/view/static/layui/layui.js}" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<style>
+    #total:hover {
+        cursor: pointer;
+    }
+
+</style>
+<body>
+<div class="layui-container">
+    <div class="layui-row">
+
+        <div style=" display: flex;align-items: center">
+            <div style="width: 30%;"><img th:src="@{/view/static/images/logo.png}"></div>
+            <div style="width: 40%; display: flex";>
+                <div style="width: 80%"><input type="text" style="width: 100%;border:solid red 2px;height: 32px"></div>
+                <div style="width: 10%;border: solid red;color: white;background-color: red;height: 32px;text-align: center">搜索</div>
+            </div>
+            <div style="margin-left:160px;cursor:pointer;width: 10%;color:  red;text-align: center;padding: 10px 20px;border: solid lightgray 1px;background: whitesmoke">我的购物车</div>
+            <div style="margin-left:10px;cursor:pointer;width: 5%;text-align: center;padding: 10px 20px;border: solid lightgray 1px;background: whitesmoke" ><a th:href="@{/pages/front/loginPage}">登录</a></div>
+        </div>
+
+    </div>
+<div class="layui-row">
+    <div class="layui-col-md2">
+    </div>
+    <div class="layui-col-md8" style="margin-left: 180px ">
+
+        <div style="display: flex;color: #8D8D8D;font-size: 15px;" >
+            <div style="width: 400px;height: auto" ><img style="width: 400px;height: auto" th:src="@{{filename}(filename=${goods_detail.img})}"></div>
+            <div style="width: 700px;height: auto">
+
+                <div style="color: black;font-size: 22px;" th:text="${goods_detail.title}"></div>
+               <div style="color: #8D8D8D;font-size: 15px;margin-top: 30px " th:text="'价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格:   '+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+${goods_detail.price}"></div>
+                <div style="color: #8D8D8D;font-size: 15px;margin-top: 30px" th:text="'原&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;价:   '+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+${goods_detail.oldPrice}"></div>
+                <div style="color: #8D8D8D;font-size: 15px;margin-top: 30px" th:text="'商&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;家:   '+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+${goods_detail.merchantName}"></div>
+                <div style="color: #8D8D8D;font-size: 12px;margin-top: 20px">
+                    <ul class="box" style="display: flex">
+                        <li><button style="height: 24px;width: 20px" id="plus">+</button></li>
+                        <li><input style="width: 40px;height: 20px;padding-left: 10px" type="text" id="text" value="1"/></li>
+                        <li><button style="height: 24px;width: 20px" id="subtract">-</button></li>
+                        <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;¥&nbsp;<input style="width: 80px;height: 20px;padding-left: 20px" type="text" th:value="${goods_detail.price}" id="money"/></li>
+                    </ul>
+                    <div id="total" style="width:100px;height:30px;border: red solid;margin-top: 20px;margin-left: 30px;text-align: center;color: #FFFFFF;background: red;font-size: 15px">加入购物车</div>
+                </div>
+
+            </div>
+        </div>
+        <div id="goodsDetail" style="width:600px">
+        </div>
+    </div>
+    <div class="layui-col-md2" >
+    </div>
+</div>
+</div>
+
+</body>
+<script th:inline="javascript">
+
+
+    $(function () {
+        layui.use(['jquery', 'form', 'layer'], function () {
+            var form = layui.form;
+
+            var layer = layui.layer;
+
+            $("#goodsDetail").append([[${goods_detail.detail}]]);
+
+            //购物车加法方法
+            $("#plus").click(
+                function () {
+                    $("#subtract").attr("disabled", false);
+                    var i = parseFloat($("#text").val());
+                    i = i + 1;
+                    var totals = i * [[${goods_detail.price}]];
+                    $("#text").val(i);
+                    $("#text").text(i);
+                    $("#money").val(totals + ".0")
+                }
+            );
+
+            //购物车减法方法
+            $("#subtract").click(
+                function () {
+                    var i = parseInt($("#text").val());
+                    if (i > 0) {
+                        $("#subtract").attr("disabled", false);
+                        i = i - 1;
+                        var totals = i * [[${goods_detail.price}]];
+                        $("#text").val(i);
+                        $("#text").text(i);
+                        $("#money").val(totals + ".0")
+                    } else {
+                        $("#text").val(0);
+                        $("#text").text(0);
+                        $("#money").val(0);
+                        $("#subtract").attr("disabled", true);
+                    }
+
+                }
+            );
+
+            //发送ajax提交购物车
+            $("#total").click(
+                function () {
+                    var ct =parseInt($("#text").val());
+                    var shopCar = new Array();
+                    shopCar.push({goodsId:[[${goods_detail.goodsId}]],count:ct});
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "/pages/front/shopCar/add",
+                        data: JSON.stringify(shopCar),
+                        contentType : 'application/json;charset=utf-8',
+                        success: function (res) {
+
+                            layer.msg("添加成功！")
+                        },
+                        error: function()
+                        {
+                            layer.msg("添加成功！")
+                        },
+                        dataType: "json"
+                    });
+                }
+
+            )
+        })
+    })
+
+</script>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" th:href="@{/view/static/layui/css/layui.css}">
+    <script th:src="@{/view/static/layui/layui.js}"></script>
+
+</head>
+<body>
+<form class="layui-form" th:action="@{/pages/back/index_back}" method="post">
+    <div>
+    <div style="border: solid red 1px;margin-top: 150px;margin-left: 500px;margin-right: 500px;box-shadow: 0 0 20px lightgray  ">
+        <div class="layui-form-item" style="margin-top: 10px">
+        <label class="layui-form-label">手机验证</label>
+        <div class="layui-input-inline">
+            <input type="text" name="phone" placeholder="请输入手机号码" class="layui-input"/>
+        </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="password" placeholder="请输入密码"  class="layui-input">
+            </div>
+        </div>
+        <div th:text="${errorMsg}"style="color: red;text-align: center"></div>
+        <div th:text="${error2Msg}"style="color: red;text-align: center"></div>
+
+        <div class="layui-form-item" style="margin-top: 20px">
+            <div class="layui-input-block">
+                <button class="layui-btn" type="submit">立即提交</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</form>
+
+<script>
+    //Demo
+    layui.use('form', function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

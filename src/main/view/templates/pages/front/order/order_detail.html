@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/view/static/layui/css/layui.css}">
+    <script th:src="@{/view/static/layui/layui.js}" charset="utf-8"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+
+<div>
+    <div style="margin-left: 200px"><img  style="width: 200px;height: 80px" th:src="@{/view/static/images/logo2.png}"></div>
+    <div></div>
+
+</div>
+<div class="layui-container" style="margin-top: 20px">
+
+    <div class="layui-row">
+        <div class="layui-col-md2">
+
+        </div>
+        <div class="layui-col-md8" style="margin-left: 200px">
+            <div style="height: 120px ;border: #8D8D8D solid 1px">
+                <div style="font-size: 17px;color: black;">收货人信息</div>
+                <div style="display: flex;margin-top: 30px;align-items: center">
+                    <div style="width: 100px;text-align: center;color: #8D8D8D">
+                        赖建梁
+                    </div>
+                    <div style="width: 250px;text-align: center;color: #8D8D8D">
+                        福建省龙岩市永定区湖雷镇
+                    </div>
+                    <div style="width: 100px;text-align: center;color: #8D8D8D">
+                        12136781657
+                    </div>
+                    <div style="width: 250px;margin-left: 25px;color: #8D8D8D">
+                        默认地址
+                    </div>
+                </div>
+                <div style="margin-top: 15px;margin-left: 29px;color: #8D8D8D">
+                    添加地址
+                </div>
+
+            </div>
+            <div style="height: 90px;margin-top: 25px;border: #8D8D8D solid 1px">
+                <div style="margin-top: 5px;font-size: 17px">支付方式</div>
+                <div style="display: flex;margin-top: 15px;margin-left: 20px">
+                    <div><button type="button"	class="layui-btn layui-btn-radius layui-btn-primary">微信支付</button></div>
+                    <div style="margin-left: 40px"><button type="button"	class="layui-btn layui-btn-radius layui-btn-primary">支付宝</button></div>
+                </div>
+
+            </div>
+            <div style="margin-top: 25px;border: #8D8D8D solid 1px">
+                <div style="font-size: 17px;color: black;">送货清单</div>
+                <div style="margin-top: 20px" th:each="x:${shopCarVo_list}">
+                    <div style="border:lavenderblush solid 2px;display: flex;height: 100px">
+                        <div style="margin-left: 20px;margin-top: 10px">
+                            <img th:src="@{{filename}(filename=${x.goods.img})}" style="height: 80px;width: 80px"/>
+                        </div>
+                        <div style="margin-left: 20px;margin-top: 10px" th:text="${x.goods.title}">
+                        </div>
+                        <div  style="margin-left: 100px;margin-top: 10px" th:text="${x.goods.price}">
+                        </div>
+                        <div  style="margin-left:  100px;margin-top: 10px" th:text="${x.count}">
+                        </div>
+                        <div th:id="'price-'+${x.shopCarId}" th:value="${x.totalMoney}" style="margin-left: 120px;margin-top: 10px;margin-right: 27px" th:text="${x.totalMoney}">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div style="margin-top: 25px;" >
+                <div style="margin-left: 590px">应付总额：<span style="color: red;font-size: 20px">￥234.0</span></div>
+                <div>
+                    <div style="color:white;text-align:center;font-size:20px;background:red;padding-top:7px;font-weight:bold;margin-left: 620px;margin-top:10px;margin-right: 40px;padding-bottom: 6px"><a style="color: #FFFFFF;padding-bottom: 9px" th:href="@{/pages/front/order/addpre}">去结算</a></div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="layui-col-md2">
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
