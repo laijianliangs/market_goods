@@ -9,13 +9,12 @@ import java.util.Date;
  * user_order
  * @author 
  */
-
 @Component
 public class UserOrder implements Serializable {
     /**
      * 订单id
      */
-    private String orderId;
+    private Integer orderId;
 
     /**
      * 用户id
@@ -74,11 +73,29 @@ public class UserOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    @Override
+    public String toString() {
+        return "UserOrder{" +
+                "orderId=" + orderId +
+                ", userId=" + userId +
+                ", allCost=" + allCost +
+                ", createTime=" + createTime +
+                ", payTime=" + payTime +
+                ", receiverPhone='" + receiverPhone + '\'' +
+                ", receiverName='" + receiverName + '\'' +
+                ", receiveAddress='" + receiveAddress + '\'' +
+                ", payType='" + payType + '\'' +
+                ", status='" + status + '\'' +
+                ", actualPayment=" + actualPayment +
+                ", totalDeduction=" + totalDeduction +
+                '}';
+    }
+
+    public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
 

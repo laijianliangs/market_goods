@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fujian.marketgoods.dao.AddressDao">
+  <resultMap id="BaseResultMap" type="com.fujian.marketgoods.pojo.entity.Address">
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="moren" jdbcType="VARCHAR" property="moren" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <insert id="insert" parameterType="com.fujian.marketgoods.pojo.entity.Address">
+    insert into address (user_id, address, moren, 
+      phone)
+    values (#{userId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{moren,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR})
+  </insert>
+  <select id="getAddressByUserId" resultType="com.fujian.marketgoods.pojo.entity.Address">
+    select * from address where user_id = #{userId}
+  </select>
+  <insert id="insertSelective" parameterType="com.fujian.marketgoods.pojo.entity.Address">
+    insert into address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="moren != null">
+        moren,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="moren != null">
+        #{moren,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

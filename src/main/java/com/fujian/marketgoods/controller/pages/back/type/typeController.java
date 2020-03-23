@@ -36,7 +36,6 @@ public class typeController {
     String add(@RequestBody String  data)
     {
         GoodsType goodsType=JSONArray.parseObject(data, GoodsType.class);
-        System.out.println(goodsType);
         if(goodsType != null)
         {
             goodsTypeService.insertGoodsType(goodsType);

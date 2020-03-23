@@ -32,9 +32,13 @@
 <div class="layui-container">
     <div class="layui-row">
         <div class="layui-col-md2">
-
+            <form th:id="selectedList" th:action="@{/pages/front/order/addpre}" method="post">
+                <input th:id="selectedListItem" type="hidden" name="selectedListItem">
+                <input th:id="totalMoney" type="hidden" name="totalMoney">
+             </form>
         </div>
         <div class="layui-col-md8" style="margin-left:180px;">
+            <div id="shopCarVo_list" th:value="${shopCarVo_list}"></div>
             <div style="margin-top: 20px" th:each="x:${shopCarVo_list}">
                 <div style="border:lavenderblush solid 2px;display: flex;height: 100px">
                     <input th:id="'check-'+${x.shopCarId}" style="margin-top: 10px;margin-left: 5px" type="checkbox"/>
@@ -56,8 +60,8 @@
                 <input th:value="1" id="selectAll" style="margin-top: 6px;margin-left: 14px;margin-top: 3px;margin-top: 16px" type="checkbox"/>
                 <div  style="margin-left: 5px;font-size:5px;color: red;font-weight:bold;margin-top: 14px">全选</div>
                 <div style="font-size:12px;color: red;font-weight:bold;margin-left:350px;margin-top: 14px">已选择<span id="counts" style="font-size: 15px;margin-left: 6px" th:text="0"></span></div>
-                <div style="font-size:12px;color: red;font-weight:bold;margin-left: 100px;margin-top: 14px">总计<span id="totalMoney" style="margin-left: 6px;font-size: 17px"></span></div>
-                <div style="font-size:20px;color: white;background:red;padding-top:7px;font-weight:bold;margin-left: 100px;margin-top:0px;margin-right: 0px;padding-left: 7px;padding-right: 7px"><a th:href="@{/pages/front/order/addpre}">去结算</a></div>
+                <div style="font-size:12px;color: red;font-weight:bold;margin-left: 100px;margin-top: 14px">总计<span id="totalMoneys" style="margin-left: 6px;font-size: 17px"></span></div>
+                <div style="font-size:20px;color: white;background:red;padding-top:7px;font-weight:bold;margin-left: 100px;margin-top:0px;margin-right: 0px;padding-left: 7px;padding-right: 7px"><a th:id="suan" >去结算</a></div>
 
 
             </div>
@@ -71,7 +75,7 @@
 </div>
 
 </body>
-<script>
+<script th:inline="javascript">
     $("#selectAll").click(function () {
         if($("#selectAll").val()==1)
         {
@@ -113,9 +117,41 @@
         });
         $("#counts").empty();
         $("#counts").text(s);
-        $("#totalMoney").text(t)
+        $("#totalMoneys").text(t);
+        $("#totalMoney").attr("value",t);
+
+        var selectList =[];
+        var item ={};
+        $("[id^=check-]").each(function () {
+            if(this.checked==true)
+            {
+                var k = $(this).attr("id").split("-")[1];
+                var w = $("#shopCarVo_list").attr("value");
+                var d = eval("("+[[${array}]]+")");
+                console.info(d);
+                for(var i=0;i<d.length;i++)
+                {
+                     if(d[i].shopCarId == k)
+                     {
+                         selectList.push(d[i]);
+
+                     }
+
+                }
+
+                // var t = eval('('++')')
+            }
+
+        });
+        console.info(selectList);
+        $("#selectedListItem").attr("value", JSON.stringify(selectList));
+        console.info($("#selectedListItem").attr("value"));
+
     });
 
+$("#suan").click(function () {
+    $("#selectedList").submit();
+})
 
 </script>
 </html>

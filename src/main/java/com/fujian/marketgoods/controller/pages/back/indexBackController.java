@@ -121,7 +121,6 @@ public class indexBackController {
     String childGoodsType(@RequestBody String data1,Model model)
     {
 
-        System.out.println(data1.replace("=",""));
         List<GoodsType> list=goodsTypeService.goodsTypeByParentID(Integer.parseInt(data1.replace("=","")));
         return JSON.toJSONString(list);
 

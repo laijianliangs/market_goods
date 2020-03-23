@@ -9,6 +9,12 @@
     <script th:src="@{/view/static/layui/layui.js}" charset="utf-8"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 </head>
+<style>
+    #tiaozhuan:hover{
+        cursor: pointer;
+    }
+
+</style>
 <body>
 
 <div>
@@ -20,24 +26,33 @@
 
     <div class="layui-row">
         <div class="layui-col-md2">
+        <form th:id="s" th:action="@{/pages/front/order/add}" method="post">
+            <input th:id="realName" name="receiverName" type="hidden">
+            <input th:id="phone" name="receiverPhone" type="hidden">
+            <input th:id="payType" name="payType" type="hidden">
+            <input th:id="address" name="receiveAddress" type="hidden">
+            <input th:id="totalMoney" name="allCost" type="hidden">
 
+        </form>
         </div>
         <div class="layui-col-md8" style="margin-left: 200px">
             <div style="height: 120px ;border: #8D8D8D solid 1px">
                 <div style="font-size: 17px;color: black;">收货人信息</div>
                 <div style="display: flex;margin-top: 30px;align-items: center">
-                    <div style="width: 100px;text-align: center;color: #8D8D8D">
-                        赖建梁
+                    <div th:id="realNames" style="width: 100px;text-align: center;color: #8D8D8D" th:value="${user.realName}" th:text="${user.realName}">
                     </div>
-                    <div style="width: 250px;text-align: center;color: #8D8D8D">
-                        福建省龙岩市永定区湖雷镇
+                    <div th:each="x:${addressList}">
+                        <div th:id="addresss" style="width: 250px;text-align: center;color: #8D8D8D" th:value="${x.address}" th:text="${x.address}">
+
+                        </div>
                     </div>
-                    <div style="width: 100px;text-align: center;color: #8D8D8D">
-                        12136781657
+
+                    <div th:id="phones" style="width: 100px;text-align: center;color: #8D8D8D" th:value="${user.phone}" th:text="${user.phone}">
+
                     </div>
-                    <div style="width: 250px;margin-left: 25px;color: #8D8D8D">
-                        默认地址
-                    </div>
+                    <!--<div style="width: 250px;margin-left: 25px;color: #8D8D8D">-->
+                        <!--默认地址-->
+                    <!--</div>-->
                 </div>
                 <div style="margin-top: 15px;margin-left: 29px;color: #8D8D8D">
                     添加地址
@@ -47,21 +62,26 @@
             <div style="height: 90px;margin-top: 25px;border: #8D8D8D solid 1px">
                 <div style="margin-top: 5px;font-size: 17px">支付方式</div>
                 <div style="display: flex;margin-top: 15px;margin-left: 20px">
-                    <div><button type="button"	class="layui-btn layui-btn-radius layui-btn-primary">微信支付</button></div>
-                    <div style="margin-left: 40px"><button type="button"	class="layui-btn layui-btn-radius layui-btn-primary">支付宝</button></div>
-                </div>
+                    <!--<div><button type=""	class="layui-btn layui-btn-radius layui-btn-primary">微信支付</button></div>-->
+                    <select th:id="payTypes" name="city" lay-verify="" style="width: 120px;height: 30px">
+                        <option value="">请选择一种支付方式</option>
+                        <option value="1">微信支付</option>
+                        <option value="2">支付宝</option>
+                    </select>
+                    <!--<div style="margin-left: 40px"><button type="button"	class="layui-btn layui-btn-radius layui-btn-primary">支付宝</button></div>-->
+            </div>
 
             </div>
             <div style="margin-top: 25px;border: #8D8D8D solid 1px">
                 <div style="font-size: 17px;color: black;">送货清单</div>
-                <div style="margin-top: 20px" th:each="x:${shopCarVo_list}">
+                <div style="margin-top: 20px" th:each="x:${shopCarList}">
                     <div style="border:lavenderblush solid 2px;display: flex;height: 100px">
                         <div style="margin-left: 20px;margin-top: 10px">
                             <img th:src="@{{filename}(filename=${x.goods.img})}" style="height: 80px;width: 80px"/>
                         </div>
                         <div style="margin-left: 20px;margin-top: 10px" th:text="${x.goods.title}">
                         </div>
-                        <div  style="margin-left: 100px;margin-top: 10px" th:text="${x.goods.price}">
+                        <div  style="margin-left: 100px;margin-top: 10px" th:value="${x.goods.price}" th:text="${x.goods.price}">
                         </div>
                         <div  style="margin-left:  100px;margin-top: 10px" th:text="${x.count}">
                         </div>
@@ -73,9 +93,9 @@
 
             </div>
             <div style="margin-top: 25px;" >
-                <div style="margin-left: 590px">应付总额：<span style="color: red;font-size: 20px">￥234.0</span></div>
+                <div style="margin-left: 590px">应付总额：<span th:id="totalMoneys" style="color: red;font-size: 20px" th:value="${totalMoney}" th:text="'￥'+${totalMoney}"></span></div>
                 <div>
-                    <div style="color:white;text-align:center;font-size:20px;background:red;padding-top:7px;font-weight:bold;margin-left: 620px;margin-top:10px;margin-right: 40px;padding-bottom: 6px"><a style="color: #FFFFFF;padding-bottom: 9px" th:href="@{/pages/front/order/addpre}">去结算</a></div>
+                    <div   style="color:white;text-align:center;font-size:20px;background:red;padding-top:7px;font-weight:bold;margin-left: 620px;margin-top:10px;margin-right: 40px;padding-bottom: 6px"><a th:id="tiaozhuan" style="color: #FFFFFF;padding-bottom: 9px;">去支付</a></div>
                 </div>
 
             </div>
@@ -87,4 +107,31 @@
     </div>
 </div>
 </body>
+<script >
+   // var order ={
+   //     receiverName:$("#realName").attr("value"),
+   //     receiveAddress:$("#address").attr("value"),
+   //     receiverPhone:$("#phone").attr("value"),
+   //     payType:$("#payType").val(),
+   //     actualPayment:$("#totalMoney").attr("value"),
+   // };
+   // console.info(JSON.stringify(order));
+   // var userorder = eval('('+[[${user_order}]]+')');
+   // userorder.receiverName =$("#realName").attr("value");
+   // console.info(JSON.stringify(userorder));
+   // console.info($("#payTypes").val());
+
+   $("#tiaozhuan").click(function () {
+
+       $("#realName").attr("value",$("#realNames").attr("value"));
+       $("#address").attr("value",$("#addresss").attr("value"));
+       $("#phone").attr("value",$("#phones").attr("value"));
+       $("#payType").attr("value",($("#payTypes").val()));
+       $("#totalMoney").attr("value",$("#totalMoneys").attr("value"));
+       $("#s").submit()
+
+   })
+
+
+</script>
 </html>

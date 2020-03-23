@@ -2,10 +2,12 @@ package com.fujian.marketgoods.controller.pages.front.shopCar;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fujian.marketgoods.pojo.entity.Goods;
 import com.fujian.marketgoods.pojo.entity.ShopCar;
 import com.fujian.marketgoods.pojo.entity.User;
+import com.fujian.marketgoods.pojo.entity.UserOrder;
 import com.fujian.marketgoods.pojo.vo.ShopCarVo;
 import com.fujian.marketgoods.pojo.vo.ShopCarVo2;
 import com.fujian.marketgoods.service.GoodService;
@@ -75,7 +77,9 @@ public class ShopCarController {
            list1.add(shopCarVo2);
        }
        model.addAttribute("shopCarVo_list",list1);
-       session.setAttribute("shopCarVo_list",list1);
+        model.addAttribute("array",JSON.toJSONString(list1));
+//        model.addAttribute("user_order",new UserOrder());
+//       session.setAttribute("shopCarVo_list",list1);
        return "/pages/front/shopCar/shopCar";
     }
 

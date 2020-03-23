@@ -1,6 +1,8 @@
 package com.fujian.marketgoods.pojo.vo;
 
-public class ShopCarVo {
+import java.io.Serializable;
+
+public class ShopCarVo implements Serializable {
 
     private int goodsId;
 

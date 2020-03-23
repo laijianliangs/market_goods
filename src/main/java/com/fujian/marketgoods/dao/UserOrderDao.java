@@ -5,13 +5,13 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserOrderDao {
-    int deleteByPrimaryKey(String orderId);
+    int deleteByPrimaryKey(Integer orderId);
 
     int insert(UserOrder record);
 
     int insertSelective(UserOrder record);
 
-    UserOrder selectByPrimaryKey(String orderId);
+    UserOrder selectByPrimaryKey(Integer orderId);
 
     int updateByPrimaryKeySelective(UserOrder record);
 
